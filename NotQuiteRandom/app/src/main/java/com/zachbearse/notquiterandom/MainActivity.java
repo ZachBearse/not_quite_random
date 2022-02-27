@@ -21,12 +21,13 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
     private NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
+    private FightersViewModel mViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
-        FightersViewModel viewModel = new ViewModelProvider(this).get(FightersViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(FightersViewModel.class);
         FragmentManager fragmentManager = getSupportFragmentManager();
         NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment);
         if(navHostFragment != null){
@@ -40,5 +41,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(mNavController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected void onPause() {
+        mViewModel.saveGroups();
+        super.onPause();
     }
 }

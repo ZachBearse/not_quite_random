@@ -45,6 +45,13 @@ public class SetListAdapter extends RecyclerView.Adapter<SetListAdapter.SetViewH
         holder.textView.setText(current);
     }
 
+    public String remove(int position){
+        String groupName = mRandomGroups.get(position);
+        mRandomGroups.remove(position);
+        notifyItemRemoved(position);
+        return groupName;
+    }
+
     @Override
     public int getItemCount() {
         if (mRandomGroups != null) {

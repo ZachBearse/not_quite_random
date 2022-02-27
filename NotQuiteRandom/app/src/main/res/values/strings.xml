@@ -11,4 +11,5 @@
     <string name="confirm">OK</string>
     <string name="choose_a_fighter">Choose a Fighter</string>
     <string name="fighter_result_title">Your Fighter:</string>
+    <string name="new_group">New Group</string>
 </resources>
