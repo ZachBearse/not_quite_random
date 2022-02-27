@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Not Quite Random</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_all">Select All</string>
+    <string name="save">Save</string>
+    <string name="title">Title:</string>
+    <string name="unselect_all">Unselect All</string>
+    <string name="random_group">Random Group</string>
+    <string name="random_group_count">Random Group %1$d</string>
+    <string name="confirm">OK</string>
+    <string name="choose_a_fighter">Choose a Fighter</string>
+    <string name="fighter_result_title">Your Fighter:</string>
+</resources>

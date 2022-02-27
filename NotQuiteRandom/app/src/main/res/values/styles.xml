@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="app_text_style" parent="">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="fighter_list_style" parent="app_text_style">
+        <item name="android:fontFamily">@font/roboto_condensed_bold</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+</resources>
