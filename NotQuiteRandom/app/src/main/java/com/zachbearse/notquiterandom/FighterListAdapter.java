@@ -45,17 +45,38 @@ public class FighterListAdapter extends RecyclerView.Adapter<FighterListAdapter.
         if (mFighters != null) {
             Fighter current = mFighters.get(position);
             holder.nameView.setText(current.getName());
-            holder.numberView.setText(current.getNumber());
+            String number = current.getNumber();
+            String[] multiNumber = number.split("-");
+            if (multiNumber.length > 1) {
+                holder.multiNumberView1.setVisibility(View.VISIBLE);
+                holder.multiNumberView1.setText(multiNumber[0]);
+                holder.multiNumberDash.setVisibility(View.VISIBLE);
+                holder.multiNumberView2.setVisibility(View.VISIBLE);
+                holder.multiNumberView2.setText(multiNumber[multiNumber.length-1]);
+                holder.numberView.setVisibility(View.INVISIBLE);
+            } else {
+                holder.multiNumberView1.setVisibility(View.INVISIBLE);
+                holder.multiNumberDash.setVisibility(View.INVISIBLE);
+                holder.multiNumberView2.setVisibility(View.INVISIBLE);
+                holder.numberView.setVisibility(View.VISIBLE);
+                holder.numberView.setText(current.getNumber());
+            }
             Uri portrait = Uri.parse(current.getImage());
             Glide.with(holder.portraitView).load(portrait).into(holder.portraitView);
             if (current.isChecked()) {
                 holder.portraitView.setColorFilter(null);
                 holder.nameView.setTextColor(WHITE);
                 holder.numberView.setTextColor(WHITE);
+                holder.multiNumberView1.setTextColor(WHITE);
+                holder.multiNumberView2.setTextColor(WHITE);
+                holder.multiNumberDash.setBackgroundColor(WHITE);
             } else {
                 holder.portraitView.setColorFilter(mGrayscale);
                 holder.nameView.setTextColor(GRAY);
                 holder.numberView.setTextColor(GRAY);
+                holder.multiNumberView1.setTextColor(GRAY);
+                holder.multiNumberView2.setTextColor(GRAY);
+                holder.multiNumberDash.setBackgroundColor(GRAY);
             }
         }
     }
@@ -94,6 +115,9 @@ public class FighterListAdapter extends RecyclerView.Adapter<FighterListAdapter.
     public class FighterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView numberView;
+        private final TextView multiNumberView1;
+        private final TextView multiNumberView2;
+        private final TextView multiNumberDash;
         private final TextView nameView;
         private final ImageView portraitView;
 
@@ -103,6 +127,9 @@ public class FighterListAdapter extends RecyclerView.Adapter<FighterListAdapter.
             numberView = itemView.findViewById(R.id.numberView);
             nameView = itemView.findViewById(R.id.nameView);
             portraitView = itemView.findViewById(R.id.portraitView);
+            multiNumberView1 = itemView.findViewById(R.id.multi_number_1);
+            multiNumberView2 = itemView.findViewById(R.id.multi_number_2);
+            multiNumberDash = itemView.findViewById(R.id.dash);
             itemView.setOnClickListener(this);
         }
 

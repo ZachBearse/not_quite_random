@@ -36,7 +36,22 @@ public class ViewOnlyFighterAdapter extends RecyclerView.Adapter<ViewOnlyFighter
         if (mFighters != null) {
             Fighter current = mFighters.get(position);
             holder.nameView.setText(current.getName());
-            holder.numberView.setText(current.getNumber());
+            String number = current.getNumber();
+            String[] multiNumber = number.split("-");
+            if (multiNumber.length > 1) {
+                holder.multiNumberView1.setVisibility(View.VISIBLE);
+                holder.multiNumberView1.setText(multiNumber[0]);
+                holder.multiNumberDash.setVisibility(View.VISIBLE);
+                holder.multiNumberView2.setVisibility(View.VISIBLE);
+                holder.multiNumberView2.setText(multiNumber[multiNumber.length-1]);
+                holder.numberView.setVisibility(View.INVISIBLE);
+            } else {
+                holder.multiNumberView1.setVisibility(View.INVISIBLE);
+                holder.multiNumberDash.setVisibility(View.INVISIBLE);
+                holder.multiNumberView2.setVisibility(View.INVISIBLE);
+                holder.numberView.setVisibility(View.VISIBLE);
+                holder.numberView.setText(current.getNumber());
+            }
             Uri portrait = Uri.parse(current.getImage());
             Glide.with(holder.portraitView).load(portrait).into(holder.portraitView);
         }
@@ -59,6 +74,9 @@ public class ViewOnlyFighterAdapter extends RecyclerView.Adapter<ViewOnlyFighter
     public class FighterViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView numberView;
+        private final TextView multiNumberView1;
+        private final TextView multiNumberView2;
+        private final TextView multiNumberDash;
         private final TextView nameView;
         private final ImageView portraitView;
 
@@ -67,6 +85,9 @@ public class ViewOnlyFighterAdapter extends RecyclerView.Adapter<ViewOnlyFighter
             numberView = itemView.findViewById(R.id.numberView);
             nameView = itemView.findViewById(R.id.nameView);
             portraitView = itemView.findViewById(R.id.portraitView);
+            multiNumberView1 = itemView.findViewById(R.id.multi_number_1);
+            multiNumberView2 = itemView.findViewById(R.id.multi_number_2);
+            multiNumberDash = itemView.findViewById(R.id.dash);
         }
     }
 }
