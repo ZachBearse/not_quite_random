@@ -4,6 +4,10 @@ import android.content.ClipData;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
@@ -48,7 +52,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        com.zachbearse.notquiterandom.databinding.FragmentHomeBinding mBinding = FragmentHomeBinding.inflate(inflater, container, false);
+        FragmentHomeBinding mBinding = FragmentHomeBinding.inflate(inflater, container, false);
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.getRoot(), new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat windowInsets) {
+                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(insets.left, 0, insets.right, insets.bottom);
+                return windowInsets;
+            }
+        });
         mBinding.recyclerView.setAdapter(mAdapter);
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         mBinding.addButton.setOnClickListener(this::onFabClick);

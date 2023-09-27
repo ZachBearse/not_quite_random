@@ -10,7 +10,7 @@ public class Fighter implements Serializable {
     private String gameSeries;
     private String number;
     private String image;
-    private boolean checked = true;
+    private boolean checked = false;
 
     public Fighter(String name, String gameSeries, String number, String image) {
         this.name = name;

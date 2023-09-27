@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,13 +27,13 @@ public class FightersViewModel extends AndroidViewModel {
         allFighters.addAll(JsonParser.getFighterSet(application));
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application);
         Set<String> groupNames = sharedPreferences.getStringSet(GROUP_NAMES_KEY, new HashSet<>());
-        if (!groupNames.isEmpty()){
-            for(String groupName : groupNames){
+        if (!groupNames.isEmpty()) {
+            for (String groupName : groupNames) {
                 List<String> fighterNumbers = new ArrayList<>(sharedPreferences.getStringSet(groupName, new HashSet<>()));
                 List<Fighter> fightersInGroup = new ArrayList<>();
-                for(String number : fighterNumbers){
-                    for(Fighter fighter : allFighters){
-                        if (fighter.getNumber().equals(number)){
+                for (String number : fighterNumbers) {
+                    for (Fighter fighter : allFighters) {
+                        if (fighter.getNumber().equals(number)) {
                             fightersInGroup.add(fighter);
                             break;
                         }
@@ -67,15 +66,20 @@ public class FightersViewModel extends AndroidViewModel {
         randomGroups.put(title, group);
     }
 
+    void renameGroup(String oldTitle, String newTitle, List<Fighter> group) {
+        randomGroups.remove(oldTitle);
+        randomGroups.put(newTitle, group);
+    }
+
     void saveGroups() {
         SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
         Set<String> groupNames = randomGroups.keySet();
         preferencesEditor.putStringSet(GROUP_NAMES_KEY, groupNames);
-        for(String groupName : groupNames){
+        for (String groupName : groupNames) {
             List<Fighter> fightersInGroup = randomGroups.get(groupName);
             Set<String> fighterNumbers = new HashSet<>();
             if (fightersInGroup != null) {
-                for(Fighter fighter: fightersInGroup){
+                for (Fighter fighter : fightersInGroup) {
                     fighterNumbers.add(fighter.getNumber());
                 }
             }

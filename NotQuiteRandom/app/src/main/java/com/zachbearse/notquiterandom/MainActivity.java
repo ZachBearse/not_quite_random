@@ -34,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        setSupportActionBar(mBinding.toolbar);
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.toolbar, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat windowInsets) {
+                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(insets.left, insets.top, insets.right, 0);
+                return windowInsets;
+            }
+        });
         mViewModel = new ViewModelProvider(this).get(FightersViewModel.class);
         FragmentManager fragmentManager = getSupportFragmentManager();
         NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment);

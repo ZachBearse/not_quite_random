@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:clipChildren="false"
     tools:context=".ViewFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingBottom="75dp"
+        android:paddingBottom="100dp"
         tools:listitem="@layout/fighter_list_item" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -23,4 +25,4 @@
         android:text="@string/choose_a_fighter"
         app:icon="@drawable/ic_question" />
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

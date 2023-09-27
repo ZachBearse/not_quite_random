@@ -28,7 +28,17 @@
         android:id="@+id/newGroupFragment"
         android:name="com.zachbearse.notquiterandom.NewGroupFragment"
         android:label="New Group"
-        tools:layout="@layout/fragment_new_group" />
+        tools:layout="@layout/fragment_new_group" >
+        <argument
+            android:name="editExisting"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="groupName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+    </fragment>
     <fragment
         android:id="@+id/viewFragment"
         android:name="com.zachbearse.notquiterandom.ViewFragment"
@@ -45,6 +55,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_viewFragment_to_newGroupFragment"
+            app:destination="@id/newGroupFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectedFighterFragment"

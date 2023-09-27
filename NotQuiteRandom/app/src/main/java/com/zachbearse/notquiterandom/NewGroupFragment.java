@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.core.graphics.Insets;
-import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
@@ -17,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.zachbearse.notquiterandom.databinding.FragmentNewGroupBinding;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -25,6 +26,8 @@ public class NewGroupFragment extends Fragment {
     private FragmentNewGroupBinding mBinding;
     private FightersViewModel mViewModel;
     private FighterListAdapter mAdapter;
+    private String mGroupName;
+    private boolean mEditExisting;
     private boolean mSelectAll = true;
 
     public NewGroupFragment() {
@@ -36,8 +39,22 @@ public class NewGroupFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(requireActivity()).get(FightersViewModel.class);
         mAdapter = new FighterListAdapter(requireContext());
-        mAdapter.setFighters(mViewModel.getAllFighters());
-        mAdapter.setAllChecked(false);
+        NewGroupFragmentArgs args = NewGroupFragmentArgs.fromBundle(getArguments());
+        mEditExisting = args.getEditExisting();
+        List<Fighter> allFighters = mViewModel.getAllFighters();
+        if (mEditExisting) {
+            mGroupName = args.getGroupName();
+            List<Fighter> group = new ArrayList<>(mViewModel.getGroup(mGroupName));
+            for (Fighter fighter : allFighters) {
+                if (group.contains(fighter)) {
+                    fighter.setChecked(true);
+                } else {
+                    fighter.setChecked(false);
+                }
+            }
+        }
+        mAdapter.setFighters(allFighters);
+        //mAdapter.setAllChecked(false);
     }
 
     @Override
@@ -45,12 +62,15 @@ public class NewGroupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = FragmentNewGroupBinding.inflate(inflater, container, false);
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.getRoot(), this::onApplyWindowInsets);
         mBinding.recyclerView.setAdapter(mAdapter);
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         mBinding.buttonSelectAll.setOnClickListener(this::onSelectAllClick);
         mBinding.buttonSave.setOnClickListener(this::onSaveClick);
         Set<String> titlesInUse = mViewModel.getRandomGroups();
-        if (titlesInUse.contains("Random Group")) {
+        if (mEditExisting) {
+            mBinding.titleEditText.setText(mGroupName);
+        } else if (titlesInUse.contains("Random Group")) {
             int i = 1;
             while (titlesInUse.contains("Random Group " + i)) {
                 i++;
@@ -59,8 +79,6 @@ public class NewGroupFragment extends Fragment {
         } else {
             mBinding.titleEditText.setText(requireContext().getString(R.string.random_group));
         }
-
-
         return mBinding.getRoot();
     }
 
@@ -79,7 +97,10 @@ public class NewGroupFragment extends Fragment {
 
     private void onSaveClick(View view) {
         String title = mBinding.titleEditText.getText().toString();
-        if (mViewModel.getRandomGroups().contains(title)) {
+        if(mEditExisting && !title.equals(mGroupName)){
+            mViewModel.renameGroup(mGroupName, title, mAdapter.getSelection());
+            Navigation.findNavController(view).popBackStack();
+        } else if (mViewModel.getRandomGroups().contains(title) && !mEditExisting) {
             mBinding.titleEditText.setError("This title is already in use");
         } else if (title.isEmpty()) {
             mBinding.titleEditText.setError("Needs a title");
@@ -95,5 +116,24 @@ public class NewGroupFragment extends Fragment {
                 Navigation.findNavController(view).popBackStack();
             }
         }
+    }
+
+    /**
+     * Apply insets to avoid overlapping the navigation bar.
+     * Apply bottom inset directly to RecyclerView to avoid visual bugs
+     *
+     * @param v            view to apply insets to
+     * @param windowInsets current window insets
+     * @return consumed insets
+     */
+    private WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat windowInsets) {
+        Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+        v.setPadding(insets.left, 0, insets.right, 0);
+        View recyclerView = v.findViewById(R.id.recyclerView);
+        // bottom RecyclerView item should come to 16 dp above bottom of screen or nav bar
+        // View.setPadding uses pixel units. convert 16 dp to pixels
+        int baseMargin = (int) getResources().getDisplayMetrics().density * 16;
+        recyclerView.setPadding(0, recyclerView.getPaddingTop(), 0, baseMargin + insets.bottom);
+        return WindowInsetsCompat.CONSUMED;
     }
 }

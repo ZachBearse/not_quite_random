@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class SetListAdapter extends RecyclerView.Adapter<SetListAdapter.SetViewH
         holder.textView.setText(current);
     }
 
-    public String remove(int position){
+    public String remove(int position) {
         String groupName = mRandomGroups.get(position);
         mRandomGroups.remove(position);
         notifyItemRemoved(position);
@@ -61,7 +61,7 @@ public class SetListAdapter extends RecyclerView.Adapter<SetListAdapter.SetViewH
         }
     }
 
-    public class SetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class SetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView textView;
 
@@ -75,9 +75,11 @@ public class SetListAdapter extends RecyclerView.Adapter<SetListAdapter.SetViewH
         public void onClick(View view) {
             int position = getLayoutPosition();
             String title = mRandomGroups.get(position);
+            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                    .addSharedElement(view, "group_transition")
+                    .build();
             NavDirections action = HomeFragmentDirections.actionHomeFragmentToViewFragment(title);
             Navigation.findNavController(view).navigate(action);
-
         }
     }
 }
